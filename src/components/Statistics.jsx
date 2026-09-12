@@ -1,45 +1,75 @@
-import React from "react";
+const Statistics = ({ sessions, tasks }) => {
+  const workSessions = sessions.filter(
+    (session) => session.type === "work"
+  );
 
-const Statistics = () => {
+  const totalMinutes = workSessions.reduce(
+    (total, session) => total + session.duration,
+    0
+  );
+
+  const completedTasks = tasks.filter(
+    (task) => task.completed
+  ).length;
+
+  const averageSession =
+    workSessions.length > 0
+      ? Math.round(totalMinutes / workSessions.length)
+      : 0;
+
+  const stats = [
+    {
+      label: "Focus Time",
+      value: `${totalMinutes}m`,
+    },
+    {
+      label: "Sessions",
+      value: workSessions.length,
+    },
+    {
+      label: "Completed Tasks",
+      value: completedTasks,
+    },
+    {
+      label: "Average Session",
+      value: `${averageSession}m`,
+    },
+  ];
+
   return (
     <section
-      id="stats-section"
-      className="mt-8 h-100 border-2 border-[#ded4cf] bg-[#eee6e1]"
+      id="statistics"
+      className="mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[230px_1fr] lg:gap-14 lg:px-10"
     >
-      <h2 className="bg-[#a84357] py-3 text-center text-2xl font-bold text-amber-50">
-        Statistics
-      </h2>
+      <div className="border-b-2 border-[#ad4058] pb-5 lg:border-b-0 lg:border-r-2 lg:pb-0 lg:pr-8">
+        <span className="text-sm font-medium text-[#75676a]">
+          03
+        </span>
 
-      <div className="mt-30 flex items-center justify-center gap-4 p-5">
-        <div className="w-60 rounded-lg border-2 border-[#a84357] bg-[#f4e8ea] p-5 text-center">
-          <p className="text-3xl font-bold text-[#a84357]">
-            0h 0m
-          </p>
+        <h2 className="mt-3 text-4xl font-medium text-[#ad4058]">
+          Statistics
+        </h2>
 
-          <p className="mt-2 text-sm font-medium text-[#6f6260]">
-            Total Focus Time
-          </p>
-        </div>
+        <p className="mt-5 leading-7 text-[#75676a]">
+          See how much focused work you have completed.
+        </p>
+      </div>
 
-        <div className="w-60 rounded-lg border-2 border-[#a84357] bg-[#f4e8ea] p-5 text-center">
-          <p className="text-3xl font-bold text-[#a84357]">
-            0
-          </p>
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((stat) => (
+          <div
+            key={stat.label}
+            className="rounded-3xl bg-white p-7 shadow-[0_15px_40px_rgba(80,40,50,0.08)]"
+          >
+            <p className="text-sm font-medium text-[#75676a]">
+              {stat.label}
+            </p>
 
-          <p className="mt-2 text-sm font-medium text-[#6f6260]">
-            Sessions Completed
-          </p>
-        </div>
-
-        <div className="w-60 rounded-lg border-2 border-[#a84357] bg-[#f4e8ea] p-5 text-center">
-          <p className="text-3xl font-bold text-[#a84357]">
-            0m
-          </p>
-
-          <p className="mt-2 text-sm font-medium text-[#6f6260]">
-            Avg. Session Length
-          </p>
-        </div>
+            <p className="mt-3 text-4xl font-extrabold text-[#ad4058]">
+              {stat.value}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

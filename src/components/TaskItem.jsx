@@ -1,23 +1,53 @@
-import React from "react";
-
-const TaskItem = () => {
+const TaskItem = ({
+  task,
+  isSelected,
+  onSelect,
+  onToggle,
+  onDelete,
+}) => {
   return (
-    <li className="m-4 mt-4 flex items-center justify-between rounded-lg border-2 border-[#8f3749] bg-[#f4e8ea] p-2">
-      <div className="flex items-center gap-3">
+    <div
+      className={`flex items-center justify-between gap-4 rounded-2xl border p-4 transition ${
+        isSelected
+          ? "border-[#ad4058] bg-[#fdf0f3]"
+          : "border-[#eadfdd] bg-[#faf7f5]"
+      }`}
+    >
+      <div className="flex min-w-0 items-center gap-3">
         <input
           type="checkbox"
-          className="h-5 w-5 accent-[#a84357]"
+          checked={task.completed}
+          onChange={() => onToggle(task.id)}
+          className="h-5 w-5 accent-[#ad4058]"
         />
 
-        <span className="font-medium text-[#a84357]">
-          Study
-        </span>
+        <button
+          type="button"
+          onClick={() => onSelect(task.id)}
+          className={`truncate text-left font-semibold ${
+            task.completed
+              ? "text-[#aaa] line-through"
+              : "text-[#403638]"
+          }`}
+        >
+          {task.name}
+        </button>
       </div>
 
-      <button className="rounded-lg bg-[#a84357] px-4 py-2 font-medium text-amber-50 transition hover:bg-[#8f3749] active:scale-95">
-        Delete
-      </button>
-    </li>
+      <div className="flex shrink-0 items-center gap-3">
+        <span className="rounded-lg bg-[#f1d8de] px-3 py-1 text-xs font-bold text-[#96384f]">
+          {task.pomodoros} 🍅
+        </span>
+
+        <button
+          type="button"
+          onClick={() => onDelete(task.id)}
+          className="rounded-lg px-2 py-1 text-sm font-bold text-[#ad4058] hover:bg-[#f4dce1]"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -1,22 +1,33 @@
-import React from "react";
-
-const Timercontrol = () => {
+const Timercontrol = ({
+  isRunning,
+  onStart,
+  onPause,
+  onReset,
+}) => {
   return (
-    <div className="mt-6 flex items-center justify-center gap-4">
-      <button className="rounded-lg bg-[#a84357] px-8 py-3 font-semibold text-amber-50 transition hover:bg-[#8f3749] active:scale-95">
-        Start
-      </button>
+    <div className="flex flex-wrap justify-center gap-3">
+      {!isRunning ? (
+        <button
+          type="button"
+          onClick={onStart}
+          className="rounded-xl bg-[#ad4058] px-8 py-3 font-bold text-white shadow-md transition hover:bg-[#92364b]"
+        >
+          {isRunning ? "Pause" : "Start"}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={onPause}
+          className="rounded-xl bg-[#ad4058] px-8 py-3 font-bold text-white shadow-md transition hover:bg-[#92364b]"
+        >
+          Pause
+        </button>
+      )}
 
       <button
-        disabled
-        className="cursor-not-allowed rounded-lg bg-[#d37d8e] px-8 py-3 font-semibold text-amber-50 opacity-50"
-      >
-        Pause
-      </button>
-
-      <button
-        disabled
-        className="cursor-not-allowed rounded-lg bg-[#d37d8e] px-8 py-3 font-semibold text-amber-50 opacity-50"
+        type="button"
+        onClick={onReset}
+        className="rounded-xl bg-[#eee5e2] px-8 py-3 font-bold text-[#4d4143] transition hover:bg-[#dfd3d0]"
       >
         Reset
       </button>

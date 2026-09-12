@@ -1,46 +1,132 @@
-import React from "react";
+import { useState } from "react";
 import TaskItem from "./TaskItem";
 
-const Tasks = () => {
+const Tasks = ({
+  tasks,
+  currentTaskId,
+  setCurrentTaskId,
+  addTask,
+  deleteTask,
+  toggleTask,
+}) => {
+  const [taskName, setTaskName] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const name = taskName.trim();
+
+    if (!name) {
+      return;
+    }
+
+    addTask(name);
+    setTaskName("");
+  };
+
+  const completed = tasks.filter(
+    (task) => task.completed
+  ).length;
+
+  const pomodoros = tasks.reduce(
+    (total, task) => total + task.pomodoros,
+    0
+  );
+
   return (
     <section
-      id="tasks-section"
-      className="mt-10 flex h-130 flex-col border-2 border-[#ded4cf] bg-[#eee6e1]"
+      id="tasks"
+      className="grid gap-10 lg:grid-cols-[230px_1fr] lg:gap-14"
     >
-      <h2 className="bg-[#a84357] py-3 text-center text-2xl font-bold text-amber-50">
-        Tasks
-      </h2>
+      <div className="border-b-2 border-[#ad4058] pb-5 lg:border-b-0 lg:border-r-2 lg:pb-0 lg:pr-8">
+        <span className="text-sm font-medium text-[#75676a]">
+          02
+        </span>
 
-      <form id="add-task-form" className="flex items-center px-5">
-        <input
-          className="mt-5 flex-1 rounded-lg border-2 border-[#a84357] bg-[#f4e8ea] py-2 pl-4 text-[#a84357] outline-none focus:border-[#8f3749]"
-          type="text"
-          id="task-input"
-          placeholder="Add a new task..."
-        />
+        <h2 className="mt-3 text-4xl font-medium text-[#ad4058]">
+          Tasks
+        </h2>
 
-        <button
-          className="mt-5 ml-4 rounded-lg border-2 border-white bg-[#a84357] px-4 py-2 text-xl font-bold text-amber-50 transition hover:bg-[#d37d8e] active:scale-95"
-          type="submit"
-          id="add-task-btn"
+        <p className="mt-5 leading-7 text-[#75676a]">
+          Add the subjects or tasks you want to focus on.
+        </p>
+      </div>
+
+      <div className="rounded-3xl bg-white p-7 shadow-[0_15px_40px_rgba(80,40,50,0.08)] sm:p-10">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-3 sm:flex-row"
         >
-          +
-        </button>
-      </form>
+          <input
+            type="text"
+            value={taskName}
+            onChange={(event) =>
+              setTaskName(event.target.value)
+            }
+            placeholder="Enter a new task..."
+            className="min-w-0 flex-1 rounded-xl border border-[#dfd1d1] bg-[#faf7f5] px-4 py-3 outline-none focus:border-[#ad4058]"
+          />
 
-      <ul id="task-list">
-        <TaskItem />
-      </ul>
+          <button
+            type="submit"
+            className="rounded-xl bg-[#ad4058] px-6 py-3 font-bold text-white transition hover:bg-[#92364b]"
+          >
+            + Add Task
+          </button>
+        </form>
 
-      <div className="mt-auto mb-5 flex justify-center">
-        <div className="inline rounded-lg border border-[#a84357] bg-[#f4e8ea] px-4 py-3">
-          <span className="font-medium text-[#6f6260]">
-            Completed tasks:
-          </span>
+        <div className="mt-6 space-y-3">
+          {tasks.length === 0 ? (
+            <div className="rounded-2xl bg-[#faf7f5] px-5 py-10 text-center">
+              <p className="text-lg font-semibold text-[#4d4143]">
+                No tasks yet
+              </p>
 
-          <span className="ml-2 font-bold text-[#a84357]">
-            0
-          </span>
+              <p className="mt-2 text-sm text-[#75676a]">
+                Add your first task to start focusing.
+              </p>
+            </div>
+          ) : (
+            tasks.map((task) => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                isSelected={currentTaskId === task.id}
+                onSelect={setCurrentTaskId}
+                onToggle={toggleTask}
+                onDelete={deleteTask}
+              />
+            ))
+          )}
+        </div>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl bg-[#f8e9ed] p-5">
+            <p className="text-sm text-[#75676a]">
+              Total Tasks
+            </p>
+            <p className="mt-2 text-2xl font-bold text-[#ad4058]">
+              {tasks.length}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-[#f8e9ed] p-5">
+            <p className="text-sm text-[#75676a]">
+              Completed
+            </p>
+            <p className="mt-2 text-2xl font-bold text-[#ad4058]">
+              {completed}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-[#f8e9ed] p-5">
+            <p className="text-sm text-[#75676a]">
+              Pomodoros
+            </p>
+            <p className="mt-2 text-2xl font-bold text-[#ad4058]">
+              {pomodoros}
+            </p>
+          </div>
         </div>
       </div>
     </section>

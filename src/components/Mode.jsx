@@ -1,19 +1,27 @@
-import React from "react";
+const Mode = ({ mode, setMode, disabled }) => {
+  const modes = [
+    ["work", "Work"],
+    ["shortBreak", "Short Break"],
+    ["longBreak", "Long Break"],
+  ];
 
-const Mode = () => {
   return (
-    <div className="mt-6 flex items-center justify-center gap-3">
-      <button className="rounded-lg bg-[#a84357] px-6 py-2.5 font-semibold text-amber-50 transition">
-        Work
-      </button>
-
-      <button className="rounded-lg bg-[#f7f0ed] px-6 py-2.5 font-medium text-[#6f6260] transition hover:bg-[#ead9d5] hover:text-[#a84357]">
-        Short Break
-      </button>
-
-      <button className="rounded-lg bg-[#f7f0ed] px-6 py-2.5 font-medium text-[#6f6260] transition hover:bg-[#ead9d5] hover:text-[#a84357]">
-        Long Break
-      </button>
+    <div className="flex flex-wrap justify-center gap-2">
+      {modes.map(([value, label]) => (
+        <button
+          key={value}
+          type="button"
+          disabled={disabled}
+          onClick={() => setMode(value)}
+          className={`rounded-xl px-5 py-3 text-sm font-bold transition ${
+            mode === value
+              ? "bg-[#ad4058] text-white shadow-md"
+              : "bg-[#f5dce2] text-[#96384f] hover:bg-[#edc7d0]"
+          } ${disabled ? "cursor-not-allowed opacity-60" : ""}`}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 };
